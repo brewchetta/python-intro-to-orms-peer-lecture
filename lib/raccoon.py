@@ -28,14 +28,23 @@ class Raccoon:
             SELECT * FROM raccoons
         """
 
-        raccoons = CURSOR.execute(sql)
+        raccoons = CURSOR.execute(sql).fetchall()
         all = []
         for row in raccoons:
-            song = cls(row[1], row[2])
-            song.id = row[0]
-            all.append(song)
+            raccoon = cls(row[1], row[2])
+            raccoon.id = row[0]
+            all.append(raccoon)
 
         return all
+
+    @classmethod
+    def find_by_id(cls, id):
+        sql = """
+            SELECT * FROM raccoons WHERE id = ?
+        """
+
+        row = CURSOR.execute(sql, id).fetchone()
+        return row
 
     def save(self):
         sql = """
